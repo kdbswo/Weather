@@ -1,11 +1,24 @@
 
 import { View, Text, Dimensions, StyleSheet, ScrollView } from "react-native";
+import { useEffect, useState } from "react";
+import * as Location from "expo-location";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
 console.log(SCREEN_WIDTH);
 
 export default function App() {
+  const [location, setLocation] = useState();
+  const [ok, setOk] = useState(true);
+  const ask = async () => {
+    const permission = await Location.requestForegroundPermissionsAsync();
+    console.log(permission);
+  };
+
+  useEffect(() => {
+    ask();
+  }, []);
+
   return (
     <View style={styles.container}>
       <View style={styles.city}>
