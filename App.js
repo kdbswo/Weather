@@ -8,11 +8,22 @@ const { width: SCREEN_WIDTH } = Dimensions.get("window");
 console.log(SCREEN_WIDTH);
 
 export default function App() {
+  const [city, setCity] = useState("loding...");
   const [location, setLocation] = useState();
   const [ok, setOk] = useState(true);
   const ask = async () => {
-    const permission = await Location.requestForegroundPermissionsAsync();
-    console.log(permission);
+    const { granted } = await Location.requestForegroundPermissionsAsync();
+    if (!granted) {
+      setOk(false);
+    }
+    const {
+      coords: { latitude, longitude },
+    } = await Location.getCurrentPositionAsync({ accuracy: 5 });
+    const location = await Location.reverseGeocodeAsync(
+      { latitude, longitude },
+      { useGoogleMaps: false }
+    );
+    setCity(location[0].city);
   };
 
   useEffect(() => {
@@ -22,7 +33,7 @@ export default function App() {
   return (
     <View style={styles.container}>
       <View style={styles.city}>
-        <Text style={styles.cityName}>Seoul</Text>
+        <Text style={styles.cityName}>{city}</Text>
       </View>
       <ScrollView
         pagingEnabled
