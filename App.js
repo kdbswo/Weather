@@ -1,4 +1,3 @@
-
 import {
   View,
   Text,
@@ -9,10 +8,21 @@ import {
 } from "react-native";
 import { useEffect, useState } from "react";
 import * as Location from "expo-location";
+import { Fontisto } from "@expo/vector-icons";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
 const API_KEY = "f8cfa7a29a003b4db84f3a356f8fa31e";
+
+const icons = {
+  Clouds: "cloudy",
+  Clear: "day-sunny",
+  Rain: "rains",
+  Atmosphere: "cloudy-gusts",
+  Snow: "snow",
+  Drizzle: "rain",
+  Thunderstorm: "lightning",
+};
 
 export default function App() {
   const [city, setCity] = useState("loding...");
@@ -64,9 +74,24 @@ export default function App() {
         ) : (
           days.map((day, index) => (
             <View key={index} style={styles.day}>
-              <Text style={styles.temp}>
-                {parseFloat(day.temp.day).toFixed(1)}
-              </Text>
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "space-around",
+                  width: "100%",
+                }}
+              >
+                <Text style={styles.temp}>
+                  {parseFloat(day.temp.day).toFixed(1)}
+                </Text>
+                <Fontisto
+                  name={icons[day.weather[0].main]}
+                  size={60}
+                  color="white"
+                />
+              </View>
+
               <Text style={styles.description}>{day.weather[0].main}</Text>
               <Text style={styles.detail}>{day.weather[0].description}</Text>
             </View>
@@ -80,7 +105,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "red",
+    backgroundColor: "tomato",
   },
   city: {
     flex: 1.2,
@@ -89,7 +114,7 @@ const styles = StyleSheet.create({
   },
   weather: {},
   cityName: {
-    fontSize: 65,
+    fontSize: 50,
     fontWeight: "500",
   },
   day: {
@@ -98,13 +123,15 @@ const styles = StyleSheet.create({
   },
   temp: {
     marginTop: 50,
-    fontSize: 130,
+    marginLeft: 70,
+    marginRight: -50,
+    fontSize: 80,
   },
   description: {
-    marginTop: 0,
-    fontSize: 60,
+    marginTop: 20,
+    fontSize: 40,
   },
   detail: {
-    fontSize: 20,
+    fontSize: 15,
   },
 });
